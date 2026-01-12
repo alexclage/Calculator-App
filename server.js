@@ -4,27 +4,30 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Base path for when app is served under a subpath (e.g., /calc)
+const BASE_PATH = '/calc';
+
 // Serve static files for car-loan calculator (CSS, JS, etc.)
-app.use('/car-loan', express.static(path.join(__dirname, 'public', 'car-loan')));
+app.use(BASE_PATH + '/car-loan', express.static(path.join(__dirname, 'public', 'car-loan')));
 
 // Serve static files for mortgage calculator (CSS, JS, etc.)
-app.use('/mortgage', express.static(path.join(__dirname, 'public', 'mortgage')));
+app.use(BASE_PATH + '/mortgage', express.static(path.join(__dirname, 'public', 'mortgage')));
 
 // Serve static files from public root (for home page assets)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(BASE_PATH, express.static(path.join(__dirname, 'public')));
 
 // Route for home page
-app.get('/', (req, res) => {
+app.get(BASE_PATH + '/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Route for car loan calculator
-app.get('/car-loan', (req, res) => {
+app.get(BASE_PATH + '/car-loan', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'car-loan', 'index.html'));
 });
 
 // Route for mortgage calculator
-app.get('/mortgage', (req, res) => {
+app.get(BASE_PATH + '/mortgage', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'mortgage', 'index.html'));
 });
 
