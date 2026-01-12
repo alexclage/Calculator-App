@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="calculator-card">
+            <h1>Mortgage Calculator</h1>
+            <p class="subtitle">Adjust the sliders to calculate your monthly payment</p>
+
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="paymentModeBtn">Calculate Payment</button>
+                <button class="mode-btn" id="affordabilityModeBtn">Calculate Price</button>
+            </div>
+
+            <div class="result-item main-result">
+                <span class="result-label" id="mainResultLabel">Monthly Payment</span>
+                <span class="result-value" id="mainResultValue">$1,775.00</span>
+            </div>
+
+            <!-- Zip Code Lookup Section -->
+            <div class="zipcode-section">
+                <div class="zipcode-input-group">
+                    <label for="zipcode" class="text-input-label">
+                        <span>Property Zip Code</span>
+                        <span class="optional-badge">Optional</span>
+                    </label>
+                    <div class="zipcode-wrapper">
+                        <input type="text" id="zipcode" class="text-input" placeholder="Enter 5-digit zip code" maxlength="5" pattern="[0-9]{5}">
+                        <button id="lookupBtn" class="lookup-btn">Lookup Area Data</button>
+                    </div>
+                    <div id="lookupStatus" class="lookup-status"></div>
+                </div>
+            </div>
+
+            <div class="input-group" id="homePriceGroup">
+                <label for="homePrice">
+                    <span class="label-text">Home Price</span>
+                    <span class="value-display">$<span id="homePriceValue">350000</span></span>
+                </label>
+                <input type="range" id="homePrice" min="50000" max="2000000" value="350000" step="5000">
+                <div class="range-labels">
+                    <span>$50,000</span>
+                    <span>$2,000,000</span>
+                </div>
+            </div>
+
+            <div class="input-group" id="monthlyPaymentGroup" style="display: none;">
+                <label for="monthlyPaymentInput">
+                    <span class="label-text">Monthly Payment</span>
+                    <span class="value-display">$<span id="monthlyPaymentInputValue">2000</span></span>
+                </label>
+                <input type="range" id="monthlyPaymentInput" min="500" max="15000" value="2000" step="50">
+                <div class="range-labels">
+                    <span>$500</span>
+                    <span>$15,000</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="downPayment">
+                    <span class="label-text">Down Payment</span>
+                    <span class="value-display">$<span id="downPaymentValue">70000</span></span>
+                </label>
+                <input type="range" id="downPayment" min="0" max="500000" value="70000" step="5000">
+                <div class="range-labels">
+                    <span>$0</span>
+                    <span>$500,000</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="interestRate">
+                    <span class="label-text">Interest Rate</span>
+                    <span class="value-display"><span id="interestRateValue">6.5</span>%</span>
+                </label>
+                <input type="range" id="interestRate" min="0" max="12" value="6.5" step="0.1">
+                <div class="range-labels">
+                    <span>0%</span>
+                    <span>12%</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="loanTerm">
+                    <span class="label-text">Loan Term</span>
+                    <span class="value-display"><span id="loanTermValue">30</span> years</span>
+                </label>
+                <input type="range" id="loanTerm" min="10" max="30" value="30" step="5">
+                <div class="range-labels">
+                    <span>10 years</span>
+                    <span>30 years</span>
+                </div>
+            </div>
+
+            <!-- Additional Mortgage Fields -->
+            <div class="additional-costs-section">
+                <h3 class="section-title">Additional Monthly Costs</h3>
+                
+                <div class="input-group">
+                    <label for="propertyTax">
+                        <span class="label-text">Property Tax (Monthly)</span>
+                        <span class="value-display">$<span id="propertyTaxValue">350</span></span>
+                    </label>
+                    <input type="range" id="propertyTax" min="0" max="2000" value="350" step="10">
+                    <div class="range-labels">
+                        <span>$0</span>
+                        <span>$2,000</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="homeInsurance">
+                        <span class="label-text">Home Insurance (Monthly)</span>
+                        <span class="value-display">$<span id="homeInsuranceValue">150</span></span>
+                    </label>
+                    <input type="range" id="homeInsurance" min="0" max="1000" value="150" step="10">
+                    <div class="range-labels">
+                        <span>$0</span>
+                        <span>$1,000</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="hoa">
+                        <span class="label-text">HOA Fees (Monthly)</span>
+                        <span class="value-display">$<span id="hoaValue">0</span></span>
+                    </label>
+                    <input type="range" id="hoa" min="0" max="1000" value="0" step="10">
+                    <div class="range-labels">
+                        <span>$0</span>
+                        <span>$1,000</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="pmi">
+                        <span class="label-text">PMI (Monthly)</span>
+                        <span class="value-display">$<span id="pmiValue">0</span></span>
+                    </label>
+                    <input type="range" id="pmi" min="0" max="500" value="0" step="5">
+                    <div class="range-labels">
+                        <span>$0</span>
+                        <span>$500</span>
+                    </div>
+                    <div class="pmi-note">
+                        <small>PMI is typically required if down payment is less than 20%</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results">
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="result-label">Principal & Interest</span>
+                        <span class="result-value" id="principalInterest">$1,775.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Monthly Payment</span>
+                        <span class="result-value" id="totalMonthlyPayment">$2,275.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Loan Amount</span>
+                        <span class="result-value" id="loanAmount">$280,000</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Interest</span>
+                        <span class="result-value" id="totalInterest">$359,000</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Amount Paid</span>
+                        <span class="result-value" id="totalAmount">$639,000</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Down Payment %</span>
+                        <span class="result-value" id="downPaymentPercent">20%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Affordability Check Section -->
+            <div class="affordability-section">
+                <h2>Affordability Check</h2>
+                <p class="section-subtitle">See if this payment fits your budget</p>
+
+                <div class="input-group-text">
+                    <label for="annualIncome" class="text-input-label">Annual Gross Income</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="annualIncome" class="text-input" value="100000" min="0" step="1000" placeholder="100000">
+                    </div>
+                </div>
+
+                <div class="input-group-text">
+                    <label for="existingDebtPayments" class="text-input-label">Existing Monthly Debt Payments</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="existingDebtPayments" class="text-input" value="0" min="0" step="50" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="optimize-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="optimizeCheckbox" class="optimize-checkbox">
+                        <span class="checkbox-text">
+                            <strong>Auto-Optimize Payment</strong>
+                            <span class="checkbox-description">Automatically calculate the ideal home purchase that fits within recommended budget guidelines (28% of gross income for housing, 36% for total debt)</span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="affordability-result">
+                    <div class="affordability-meter">
+                        <div class="meter-label">Affordability Rating</div>
+                        <div class="range-visualization">
+                            <div class="range-bar">
+                                <div class="range-section safe"></div>
+                                <div class="range-section acceptable"></div>
+                                <div class="range-section risky"></div>
+                            </div>
+                            <div class="range-marker" id="rangeMarker">
+                                <div class="marker-dot"></div>
+                            </div>
+                            <div class="range-labels-container">
+                                <span class="range-label-item">Conservative<br><span class="range-percentage" id="conservativeAmount">$0</span></span>
+                                <span class="range-label-item center">Recommended Max<br><span class="range-percentage" id="maxAmount">$0</span></span>
+                                <span class="range-label-item">High Risk<br><span class="range-percentage" id="riskyAmount">$0</span></span>
+                            </div>
+                        </div>
+                        <div class="meter-status" id="meterStatus">Calculating...</div>
+                    </div>
+                    
+                    <div class="affordability-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Housing Payment Ratio:</span>
+                            <span class="detail-value" id="housingRatio">0%</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Total Debt Ratio:</span>
+                            <span class="detail-value" id="debtRatio">0%</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Recommended Range:</span>
+                            <span class="detail-value">28% housing, 36% total debt</span>
+                        </div>
+                    </div>
+
+                    <div class="affordability-advice" id="affordabilityAdvice">
+                        Enter your income to see affordability analysis
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    
+    <script src="config.js"></script>
+    <script src="calculator.js"></script>
+</body>
+</html>

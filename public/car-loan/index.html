@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Loan Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="calculator-card">
+            <div style="margin-bottom: 20px;">
+                <a href="/" style="color: #667eea; text-decoration: none; font-weight: 600;">&larr; Back to Home</a>
+            </div>
+            <h1>Car Loan Calculator</h1>
+            <p class="subtitle">Adjust the sliders to calculate your monthly payment</p>
+
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="paymentModeBtn">Calculate Payment</button>
+                <button class="mode-btn" id="affordabilityModeBtn">Calculate Price</button>
+            </div>
+
+            <div class="result-item main-result">
+                <span class="result-label" id="mainResultLabel">Monthly Payment</span>
+                <span class="result-value" id="mainResultValue">$475.42</span>
+            </div>
+
+            <div class="input-group" id="carPriceGroup">
+                <label for="carPrice">
+                    <span class="label-text">Car Price</span>
+                    <span class="value-display">$<span id="carPriceValue">30000</span></span>
+                </label>
+                <input type="range" id="carPrice" min="5000" max="200000" value="30000" step="1000">
+                <div class="range-labels">
+                    <span>$5,000</span>
+                    <span>$200,000</span>
+                </div>
+            </div>
+
+            <div class="input-group" id="monthlyPaymentGroup" style="display: none;">
+                <label for="monthlyPaymentInput">
+                    <span class="label-text">Monthly Payment</span>
+                    <span class="value-display">$<span id="monthlyPaymentInputValue">500</span></span>
+                </label>
+                <input type="range" id="monthlyPaymentInput" min="100" max="5000" value="500" step="10">
+                <div class="range-labels">
+                    <span>$100</span>
+                    <span>$5,000</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="downPayment">
+                    <span class="label-text">Down Payment</span>
+                    <span class="value-display">$<span id="downPaymentValue">5000</span></span>
+                </label>
+                <input type="range" id="downPayment" min="0" max="200000" value="5000" step="500">
+                <div class="range-labels">
+                    <span>$0</span>
+                    <span>$200,000</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="interestRate">
+                    <span class="label-text">Interest Rate</span>
+                    <span class="value-display"><span id="interestRateValue">5.5</span>%</span>
+                </label>
+                <input type="range" id="interestRate" min="0" max="20" value="5.5" step="0.1">
+                <div class="range-labels">
+                    <span>0%</span>
+                    <span>20%</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="loanTerm">
+                    <span class="label-text">Loan Term</span>
+                    <span class="value-display"><span id="loanTermValue">60</span> months</span>
+                </label>
+                <input type="range" id="loanTerm" min="12" max="84" value="60" step="12">
+                <div class="range-labels">
+                    <span>12 months</span>
+                    <span>84 months</span>
+                </div>
+            </div>
+
+            <div class="results">
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="result-label">Total Loan Amount</span>
+                        <span class="result-value" id="loanAmount">$25,000</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Interest</span>
+                        <span class="result-value" id="totalInterest">$3,525.20</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Amount Paid</span>
+                        <span class="result-value" id="totalAmount">$28,525.20</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Affordability Check Section -->
+            <div class="affordability-section">
+                <h2>Affordability Check</h2>
+                <p class="section-subtitle">See if this payment fits your budget</p>
+
+                <div class="input-group-text">
+                    <label for="annualIncome" class="text-input-label">Annual Gross Income</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="annualIncome" class="text-input" value="60000" min="0" step="1000" placeholder="60000">
+                    </div>
+                </div>
+
+                <div class="input-group-text">
+                    <label for="existingCarPayments" class="text-input-label">Existing Monthly Car Payments</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="existingCarPayments" class="text-input" value="0" min="0" step="25" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="optimize-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="optimizeCheckbox" class="optimize-checkbox">
+                        <span class="checkbox-text">
+                            <strong>Auto-Optimize Payment</strong>
+                            <span class="checkbox-description">Automatically calculate the ideal car purchase that fits within recommended budget guidelines (7% of gross income)</span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="affordability-result">
+                    <div class="affordability-meter">
+                        <div class="meter-label">Affordability Rating</div>
+                        <div class="range-visualization">
+                            <div class="range-bar">
+                                <div class="range-section safe"></div>
+                                <div class="range-section acceptable"></div>
+                                <div class="range-section risky"></div>
+                            </div>
+                            <div class="range-marker" id="rangeMarker">
+                                <div class="marker-dot"></div>
+                            </div>
+                            <div class="range-labels-container">
+                                <span class="range-label-item">Conservative<br><span class="range-percentage" id="conservativeAmount">$0</span></span>
+                                <span class="range-label-item center">Recommended Max<br><span class="range-percentage" id="maxAmount">$0</span></span>
+                                <span class="range-label-item">High Risk<br><span class="range-percentage" id="riskyAmount">$0</span></span>
+                            </div>
+                        </div>
+                        <div class="meter-status" id="meterStatus">Calculating...</div>
+                    </div>
+                    
+                    <div class="affordability-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Total Car Payments:</span>
+                            <span class="detail-value" id="totalCarPayments">$0</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Percentage of Income:</span>
+                            <span class="detail-value" id="debtRatio">0%</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Recommended Range:</span>
+                            <span class="detail-value">4-7% (Max 10%)</span>
+                        </div>
+                    </div>
+
+                    <div class="affordability-advice" id="affordabilityAdvice">
+                        Enter your income to see affordability analysis
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="calculator.js"></script>
+</body>
+</html>

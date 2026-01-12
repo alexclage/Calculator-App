@@ -1,0 +1,21 @@
+{
+  "name": "financial-calculators",
+  "version": "1.0.0",
+  "description": "A web application with Car Loan and Mortgage calculators",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "calculator",
+    "mortgage",
+    "car-loan",
+    "finance"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
