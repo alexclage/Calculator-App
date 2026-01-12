@@ -392,10 +392,18 @@ document.addEventListener('mousemove', (e) => {
     const monthlyRate = annualRate / 12;
     const loanTermMonths = parseFloat(loanTermInput.value);
     
-    if (monthlyRate > 0 && newCarPayment > 0) {
-        // Use loan payment formula to calculate principal: P = PMT * ((1 - (1 + r)^-n) / r)
-        const loanAmount = newCarPayment * ((1 - Math.pow(1 + monthlyRate, -loanTermMonths)) / monthlyRate);
-        const newCarPrice = Math.max(5000, Math.min(200000, loanAmount + downPayment));
+    if (newCarPayment > 0) {
+        let newCarPrice;
+        
+        if (monthlyRate > 0) {
+            // Use loan payment formula to calculate principal: P = PMT * ((1 - (1 + r)^-n) / r)
+            const loanAmount = newCarPayment * ((1 - Math.pow(1 + monthlyRate, -loanTermMonths)) / monthlyRate);
+            newCarPrice = Math.max(5000, Math.min(200000, loanAmount + downPayment));
+        } else {
+            // If interest rate is 0, simple calculation
+            const loanAmount = newCarPayment * loanTermMonths;
+            newCarPrice = Math.max(5000, Math.min(200000, loanAmount + downPayment));
+        }
         
         // Update the car price slider
         carPriceInput.value = Math.round(newCarPrice);

@@ -610,12 +610,20 @@ document.addEventListener('mousemove', (e) => {
     const pmi = parseFloat(pmiInput.value) || 0;
     
     // Subtract non-principal/interest costs
-    const principalInterestPayment = newTotalPayment - propertyTax - homeInsurance - hoa - pmi;
+    const principalInterestPayment = Math.max(0, newTotalPayment - propertyTax - homeInsurance - hoa - pmi);
     
-    if (monthlyRate > 0 && principalInterestPayment > 0) {
-        // Use loan payment formula to calculate principal: P = PMT * ((1 - (1 + r)^-n) / r)
-        const loanAmount = principalInterestPayment * ((1 - Math.pow(1 + monthlyRate, -loanTermMonths)) / monthlyRate);
-        const newHomePrice = Math.max(50000, Math.min(2000000, loanAmount + downPayment));
+    if (principalInterestPayment > 0) {
+        let newHomePrice;
+        
+        if (monthlyRate > 0) {
+            // Use loan payment formula to calculate principal: P = PMT * ((1 - (1 + r)^-n) / r)
+            const loanAmount = principalInterestPayment * ((1 - Math.pow(1 + monthlyRate, -loanTermMonths)) / monthlyRate);
+            newHomePrice = Math.max(50000, Math.min(2000000, loanAmount + downPayment));
+        } else {
+            // If interest rate is 0, simple calculation
+            const loanAmount = principalInterestPayment * loanTermMonths;
+            newHomePrice = Math.max(50000, Math.min(2000000, loanAmount + downPayment));
+        }
         
         // Update the home price slider
         homePriceInput.value = Math.round(newHomePrice);
