@@ -563,5 +563,79 @@ zipcodeInput.addEventListener('keypress', (e) => {
     }
 });
 
+// Make affordability meter marker draggable
+let isDragging = false;
+let dragStartX = 0;
+
+rangeMarker.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    dragStartX = e.clientX;
+    rangeMarker.classList.add('dragging');
+    e.preventDefault();
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    
+    const annualIncome = parseFloat(annualIncomeInput.value) || 0;
+    if (annualIncome === 0) return;
+    
+    const monthlyIncome = annualIncome / 12;
+    const rangeBar = document.querySelector('.range-bar');
+    const rect = rangeBar.getBoundingClientRect();
+    
+    // Calculate position as percentage
+    let positionX = e.clientX - rect.left;
+    positionX = Math.max(0, Math.min(positionX, rect.width));
+    const percentage = (positionX / rect.width) * 100;
+    
+    // Convert percentage to housing ratio (0-50% of income range)
+    const maxRange = 0.50;
+    const housingRatio = (percentage / 100) * maxRange;
+    
+    // Calculate new total housing payment amount
+    const newTotalPayment = monthlyIncome * housingRatio;
+    
+    // Update the current monthly payment
+    currentMonthlyPayment = newTotalPayment;
+    
+    // Back-calculate the home price from the desired payment
+    const downPayment = parseFloat(downPaymentInput.value) || 0;
+    const annualRate = parseFloat(interestRateInput.value) / 100;
+    const monthlyRate = annualRate / 12;
+    const loanTermMonths = parseFloat(loanTermInput.value);
+    const propertyTax = parseFloat(propertyTaxInput.value) || 0;
+    const homeInsurance = parseFloat(homeInsuranceInput.value) || 0;
+    const hoa = parseFloat(hoaInput.value) || 0;
+    const pmi = parseFloat(pmiInput.value) || 0;
+    
+    // Subtract non-principal/interest costs
+    const principalInterestPayment = newTotalPayment - propertyTax - homeInsurance - hoa - pmi;
+    
+    if (monthlyRate > 0 && principalInterestPayment > 0) {
+        // Use loan payment formula to calculate principal: P = PMT * ((1 - (1 + r)^-n) / r)
+        const loanAmount = principalInterestPayment * ((1 - Math.pow(1 + monthlyRate, -loanTermMonths)) / monthlyRate);
+        const newHomePrice = loanAmount + downPayment;
+        
+        // Update the home price slider
+        homePriceInput.value = Math.round(newHomePrice);
+        homePriceDisplay.textContent = formatNumber(Math.round(newHomePrice));
+        
+        // Recalculate to update all displays
+        if (calculatorMode === 'payment') {
+            calculateMonthlyPayment();
+        }
+    }
+    
+    updateAffordabilityCheck();
+});
+
+document.addEventListener('mouseup', () => {
+    if (isDragging) {
+        isDragging = false;
+        rangeMarker.classList.remove('dragging');
+    }
+});
+
 // Initialize calculator on page load
 updateDisplays();

@@ -348,5 +348,74 @@ affordabilityModeBtn.addEventListener('click', switchToAffordabilityMode);
 // Add event listener to optimize checkbox
 optimizeCheckbox.addEventListener('change', handleOptimizeChange);
 
+// Make affordability meter marker draggable
+let isDragging = false;
+let dragStartX = 0;
+
+rangeMarker.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    dragStartX = e.clientX;
+    rangeMarker.classList.add('dragging');
+    e.preventDefault();
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    
+    const annualIncome = parseFloat(annualIncomeInput.value) || 0;
+    if (annualIncome === 0) return;
+    
+    const monthlyIncome = annualIncome / 12;
+    const rangeBar = document.querySelector('.range-bar');
+    const rect = rangeBar.getBoundingClientRect();
+    
+    // Calculate position as percentage
+    let positionX = e.clientX - rect.left;
+    positionX = Math.max(0, Math.min(positionX, rect.width));
+    const percentage = (positionX / rect.width) * 100;
+    
+    // Convert percentage to debt ratio (0-15% of income range)
+    const maxRange = 0.15;
+    const debtRatio = (percentage / 100) * maxRange;
+    
+    // Calculate new total payment amount
+    const newTotalPayment = monthlyIncome * debtRatio;
+    const existingPayments = parseFloat(existingCarPaymentsInput.value) || 0;
+    const newCarPayment = Math.max(0, newTotalPayment - existingPayments);
+    
+    // Update the current monthly payment
+    currentMonthlyPayment = newCarPayment;
+    
+    // Back-calculate the car price from the desired payment
+    const downPayment = parseFloat(downPaymentInput.value) || 0;
+    const annualRate = parseFloat(interestRateInput.value) / 100;
+    const monthlyRate = annualRate / 12;
+    const loanTermMonths = parseFloat(loanTermInput.value);
+    
+    if (monthlyRate > 0 && newCarPayment > 0) {
+        // Use loan payment formula to calculate principal: P = PMT * ((1 - (1 + r)^-n) / r)
+        const loanAmount = newCarPayment * ((1 - Math.pow(1 + monthlyRate, -loanTermMonths)) / monthlyRate);
+        const newCarPrice = loanAmount + downPayment;
+        
+        // Update the car price slider
+        carPriceInput.value = Math.round(newCarPrice);
+        carPriceDisplay.textContent = formatNumber(Math.round(newCarPrice));
+        
+        // Recalculate to update all displays
+        if (calculatorMode === 'payment') {
+            calculateMonthlyPayment();
+        }
+    }
+    
+    updateAffordabilityCheck();
+});
+
+document.addEventListener('mouseup', () => {
+    if (isDragging) {
+        isDragging = false;
+        rangeMarker.classList.remove('dragging');
+    }
+});
+
 // Initialize calculator on page load
 updateDisplays();
