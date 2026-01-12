@@ -92,11 +92,11 @@ class MortgageCalculator {
     }
     
     attachEventListeners() {
-        // Input change listeners
-        const inputs = ['homePrice', 'downPayment', 'interestRate', 'loanTerm', 
-                       'propertyTax', 'homeInsurance', 'hoa', 'pmi', 'annualIncome', 'existingDebt'];
+        // Input change listeners - these affect loan calculations
+        const loanInputs = ['homePrice', 'downPayment', 'interestRate', 'loanTerm', 
+                           'propertyTax', 'homeInsurance', 'hoa', 'pmi'];
         
-        inputs.forEach(input => {
+        loanInputs.forEach(input => {
             this.elements[input].addEventListener('input', () => {
                 if (!this.isUpdating) {
                     this.state[input] = parseFloat(this.elements[input].value) || 0;
@@ -104,6 +104,33 @@ class MortgageCalculator {
                     if (this.calculatorMode === 'payment') {
                         this.calculateFromHomePrice();
                     } else {
+                        this.calculateFromPayment();
+                    }
+                }
+            });
+        });
+        
+        // Affordability inputs - only affect ratios, not home price in payment mode
+        const affordabilityInputs = ['annualIncome', 'existingDebt'];
+        
+        affordabilityInputs.forEach(input => {
+            this.elements[input].addEventListener('input', () => {
+                if (!this.isUpdating) {
+                    this.state[input] = parseFloat(this.elements[input].value) || 0;
+                    this.updateDisplay(input);
+                    if (this.calculatorMode === 'payment') {
+                        // Only recalculate affordability ratios, not the loan
+                        const monthlyIncome = this.state.annualIncome / 12;
+                        if (monthlyIncome > 0) {
+                            this.calculated.housingRatio = (this.calculated.totalMonthlyPayment / monthlyIncome) * 100;
+                            this.calculated.debtRatio = ((this.calculated.totalMonthlyPayment + this.state.existingDebt) / monthlyIncome) * 100;
+                        } else {
+                            this.calculated.housingRatio = 0;
+                            this.calculated.debtRatio = 0;
+                        }
+                        this.updateAllDisplays();
+                    } else {
+                        // In affordability mode, changing income DOES change the affordable price
                         this.calculateFromPayment();
                     }
                 }
