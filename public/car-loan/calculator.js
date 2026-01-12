@@ -410,6 +410,11 @@ document.addEventListener('mousemove', (e) => {
             // Re-apply our drag position after calculation
             rangeMarker.style.left = percentage + '%';
         }
+        
+        // Update affordability display values
+        updateAffordabilityCheck();
+        // Re-apply drag position one more time to ensure it stays
+        rangeMarker.style.left = percentage + '%';
     }
 });
 
