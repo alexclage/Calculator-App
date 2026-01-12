@@ -403,7 +403,7 @@ document.addEventListener('mousemove', (e) => {
         
         // Recalculate to update all displays
         if (calculatorMode === 'payment') {
-            calculateMonthlyPayment();
+            calculateLoan();
         }
     }
     
