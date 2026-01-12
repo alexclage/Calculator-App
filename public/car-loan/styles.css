@@ -347,19 +347,8 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 
 .range-section {
+    flex: 1;  /* Equal thirds */
     transition: opacity 0.3s;
-}
-
-.range-section.safe {
-    flex: 7;   /* 0-7% of income = 46.67% of bar (7 out of 15) */
-}
-
-.range-section.acceptable {
-    flex: 3;   /* 7-10% of income = 20% of bar (3 out of 15) */
-}
-
-.range-section.risky {
-    flex: 5;   /* 10-15% of income = 33.33% of bar (5 out of 15) */
 }
 
 .range-section:first-child {

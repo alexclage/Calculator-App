@@ -322,12 +322,12 @@ function updateAffordabilityCheck() {
     debtRatioDisplay.textContent = debtRatio.toFixed(1) + '%';
     
     // Calculate the range boundaries
-    // Conservative: 25% of monthly income (very safe)
-    // Recommended: 28% of monthly income (standard guideline)
-    // Max acceptable: 40% of monthly income (high risk threshold)
-    const conservativePayment = monthlyIncome * 0.25;
-    const recommendedPayment = monthlyIncome * 0.28;
-    const maxPayment = monthlyIncome * 0.40;
+    // Conservative: 15% of monthly income (safe zone)
+    // Recommended: 30% of monthly income (acceptable zone)
+    // Max acceptable: 45% of monthly income (high risk threshold)
+    const conservativePayment = monthlyIncome * 0.15;
+    const recommendedPayment = monthlyIncome * 0.30;
+    const maxPayment = monthlyIncome * 0.45;
     
     // Update range labels
     conservativeAmountDisplay.textContent = formatCurrency(conservativePayment);
@@ -335,8 +335,8 @@ function updateAffordabilityCheck() {
     riskyAmountDisplay.textContent = formatCurrency(maxPayment);
     
     // Calculate marker position (percentage across the bar)
-    // The bar represents: 0% to 40% of income
-    const maxRange = 0.40; // 40% of income is the full width of the bar
+    // The bar represents: 0% to 45% of income (equal thirds at 15%, 30%, 45%)
+    const maxRange = 0.45; // 45% of income is the full width of the bar
     let markerPosition = (housingRatio / 100) / maxRange * 100;
     markerPosition = Math.min(Math.max(markerPosition, 0), 100); // Clamp between 0-100
     
@@ -345,19 +345,19 @@ function updateAffordabilityCheck() {
     // Determine affordability status
     let status, advice, statusClass;
     
-    if (housingRatio <= 25) {
+    if (housingRatio <= 15) {
         status = 'Excellent';
         statusClass = 'excellent';
-        advice = '✓ Excellent! Your housing payment is very conservative at ' + housingRatio.toFixed(1) + '% of your income, well below the recommended 28% guideline. You have significant room in your budget for savings, investments, and other expenses.';
-    } else if (housingRatio <= 28) {
+        advice = '✓ Excellent! Your housing payment is very conservative at ' + housingRatio.toFixed(1) + '% of your income. You have significant room in your budget for savings, investments, and other expenses.';
+    } else if (housingRatio <= 30) {
         status = 'Good';
         statusClass = 'good';
         if (debtRatio <= 36) {
-            advice = '✓ Good! Your housing payment of ' + housingRatio.toFixed(1) + '% is at or near the ideal 28% guideline, and your total debt ratio of ' + debtRatio.toFixed(1) + '% is within the recommended 36% maximum. This is a financially responsible amount.';
+            advice = '✓ Good! Your housing payment of ' + housingRatio.toFixed(1) + '% is acceptable, and your total debt ratio of ' + debtRatio.toFixed(1) + '% is within reasonable limits. This is a manageable financial commitment.';
         } else {
-            advice = '⚠ Moderate. Your housing payment of ' + housingRatio.toFixed(1) + '% is good, but your total debt ratio of ' + debtRatio.toFixed(1) + '% exceeds the 36% guideline. Consider reducing other debts before taking on this mortgage.';
+            advice = '⚠ Moderate. Your housing payment of ' + housingRatio.toFixed(1) + '% is acceptable, but your total debt ratio of ' + debtRatio.toFixed(1) + '% exceeds the 36% guideline. Consider reducing other debts before taking on this mortgage.';
         }
-    } else if (housingRatio <= 33) {
+    } else if (housingRatio <= 36) {
         status = 'Moderate';
         statusClass = 'moderate';
         if (debtRatio <= 36) {
@@ -589,8 +589,8 @@ document.addEventListener('mousemove', (e) => {
     positionX = Math.max(0, Math.min(positionX, rect.width));
     const percentage = (positionX / rect.width) * 100;
     
-    // Convert percentage to housing ratio (0-40% of income range)
-    const maxRange = 0.40;
+    // Convert percentage to housing ratio (0-45% of income range, equal thirds)
+    const maxRange = 0.45;
     const housingRatio = (percentage / 100) * maxRange;
     
     // Calculate new total housing payment amount

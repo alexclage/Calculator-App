@@ -243,9 +243,9 @@ function updateAffordabilityCheck() {
     debtRatioDisplay.textContent = debtRatio.toFixed(1) + '%';
     
     // Calculate the range boundaries
-    // Conservative: 7% of monthly income (ideal target)
-    // Max recommended: 10% of monthly income (upper acceptable limit)
-    const conservativePayment = monthlyIncome * 0.07;
+    // Conservative: 5% of monthly income (safe zone)
+    // Max recommended: 10% of monthly income (acceptable zone)
+    const conservativePayment = monthlyIncome * 0.05;
     const maxRecommendedPayment = monthlyIncome * 0.10;
     const riskyPayment = monthlyIncome * 0.15;
     
@@ -267,15 +267,15 @@ function updateAffordabilityCheck() {
     // Determine affordability status
     let status, advice, statusClass;
     
-    if (debtRatio <= 4) {
+    if (debtRatio <= 5) {
         status = 'Excellent';
         statusClass = 'excellent';
-        advice = '✓ Excellent! Your car payment is very conservative and well below the recommended 7% target. You have significant room in your budget for savings and other expenses.';
-    } else if (debtRatio <= 7) {
+        advice = '✓ Excellent! Your car payment is very conservative and well within the safe 5% target. You have significant room in your budget for savings and other expenses.';
+    } else if (debtRatio <= 10) {
         status = 'Good';
         statusClass = 'good';
-        advice = '✓ Good! Your car payment is at or near the ideal 7% of gross monthly income. This is a financially responsible amount that leaves adequate budget flexibility for other expenses and savings.';
-    } else if (debtRatio <= 10) {
+        advice = '✓ Good! Your car payment is within the acceptable 10% of gross monthly income. This is a financially responsible amount that leaves adequate budget flexibility for other expenses and savings.';
+    } else if (debtRatio <= 15) {
         status = 'Moderate';
         statusClass = 'moderate';
         advice = '⚠ Moderate. Your car payment is above the 7% ideal but within the acceptable 10% maximum. At ' + debtRatio.toFixed(1) + '% of your income, you should still be able to manage this payment, but consider if you have enough left for other expenses and emergency savings.';
