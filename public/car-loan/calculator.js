@@ -415,14 +415,17 @@ document.addEventListener('mousemove', (e) => {
         // Manually position the marker to match the drag position
         rangeMarker.style.left = percentage + '%';
         
-        // Recalculate to update all displays but skip repositioning marker
+        // Update the displays without recalculating from scratch
         if (calculatorMode === 'payment') {
-            calculateLoan();
-            // Restore our target payment after calculation (calculateLoan overwrites it)
-            currentMonthlyPayment = targetPayment;
-            // Re-apply our drag position after calculation
-            rangeMarker.style.left = percentage + '%';
+            // Just update the main result display
+            mainResultValue.textContent = formatCurrency(Math.round(targetPayment));
+            
+            // Update loan amount display
+            loanAmountDisplay.textContent = formatCurrency(Math.round(newCarPrice - downPayment));
         }
+        
+        // Ensure currentMonthlyPayment is our target
+        currentMonthlyPayment = targetPayment;
         
         // Update affordability display values
         updateAffordabilityCheck();
