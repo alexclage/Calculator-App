@@ -1,2 +1,3 @@
-# Keep API key secure
-config.js
+# Optional: Keep API key secure by creating a local config.js
+# The repository includes a default config.js that works without an API key
+
