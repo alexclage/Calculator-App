@@ -324,10 +324,10 @@ function updateAffordabilityCheck() {
     // Calculate the range boundaries
     // Conservative: 25% of monthly income (very safe)
     // Recommended: 28% of monthly income (standard guideline)
-    // Max acceptable: 36% of monthly income (including all debt)
+    // Max acceptable: 40% of monthly income (high risk threshold)
     const conservativePayment = monthlyIncome * 0.25;
     const recommendedPayment = monthlyIncome * 0.28;
-    const maxPayment = monthlyIncome * 0.36;
+    const maxPayment = monthlyIncome * 0.40;
     
     // Update range labels
     conservativeAmountDisplay.textContent = formatCurrency(conservativePayment);
@@ -335,8 +335,8 @@ function updateAffordabilityCheck() {
     riskyAmountDisplay.textContent = formatCurrency(maxPayment);
     
     // Calculate marker position (percentage across the bar)
-    // The bar represents: 0% to 50% of income
-    const maxRange = 0.50; // 50% of income is the full width of the bar
+    // The bar represents: 0% to 40% of income
+    const maxRange = 0.40; // 40% of income is the full width of the bar
     let markerPosition = (housingRatio / 100) / maxRange * 100;
     markerPosition = Math.min(Math.max(markerPosition, 0), 100); // Clamp between 0-100
     
@@ -589,8 +589,8 @@ document.addEventListener('mousemove', (e) => {
     positionX = Math.max(0, Math.min(positionX, rect.width));
     const percentage = (positionX / rect.width) * 100;
     
-    // Convert percentage to housing ratio (0-50% of income range)
-    const maxRange = 0.50;
+    // Convert percentage to housing ratio (0-40% of income range)
+    const maxRange = 0.40;
     const housingRatio = (percentage / 100) * maxRange;
     
     // Calculate new total housing payment amount
