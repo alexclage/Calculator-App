@@ -415,16 +415,12 @@ document.addEventListener('mousemove', (e) => {
         // Manually position the marker to match the drag position
         rangeMarker.style.left = percentage + '%';
         
-        // Update the displays without recalculating from scratch
+        // Recalculate everything based on the new car price to sync all values
         if (calculatorMode === 'payment') {
-            // Just update the main result display
-            mainResultValue.textContent = formatCurrency(Math.round(targetPayment));
-            
-            // Update loan amount display
-            loanAmountDisplay.textContent = formatCurrency(Math.round(newCarPrice - downPayment));
+            calculateLoan();
         }
         
-        // Ensure currentMonthlyPayment is our target
+        // Now override the currentMonthlyPayment with our target for affordability display
         currentMonthlyPayment = targetPayment;
         
         // Update affordability display values

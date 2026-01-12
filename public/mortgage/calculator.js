@@ -635,24 +635,12 @@ document.addEventListener('mousemove', (e) => {
         // Manually position the marker to match the drag position
         rangeMarker.style.left = percentage + '%';
         
-        // Update the displays without recalculating from scratch
-        // Calculate what the payment would be at this home price
+        // Recalculate everything based on the new home price to sync all values
         if (calculatorMode === 'payment') {
-            // Just update the main result display
-            mainResultValue.textContent = formatCurrency(Math.round(targetPayment));
-            
-            // Update loan amount display
-            loanAmountDisplay.textContent = formatCurrency(Math.round(newHomePrice - downPayment));
-            
-            // Calculate P&I for display
-            const principalAndInterest = principalInterestPayment;
-            principalInterestDisplay.textContent = formatCurrency(Math.round(principalAndInterest));
-            
-            // Show total monthly payment
-            totalMonthlyPaymentDisplay.textContent = formatCurrency(Math.round(targetPayment));
+            calculateLoan();
         }
         
-        // Ensure currentMonthlyPayment is our target
+        // Now override the currentMonthlyPayment with our target for affordability display
         currentMonthlyPayment = targetPayment;
         
         // Update affordability display values
