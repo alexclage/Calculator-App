@@ -395,19 +395,22 @@ document.addEventListener('mousemove', (e) => {
     if (monthlyRate > 0 && newCarPayment > 0) {
         // Use loan payment formula to calculate principal: P = PMT * ((1 - (1 + r)^-n) / r)
         const loanAmount = newCarPayment * ((1 - Math.pow(1 + monthlyRate, -loanTermMonths)) / monthlyRate);
-        const newCarPrice = loanAmount + downPayment;
+        const newCarPrice = Math.max(5000, Math.min(200000, loanAmount + downPayment));
         
         // Update the car price slider
         carPriceInput.value = Math.round(newCarPrice);
         carPriceDisplay.textContent = formatNumber(Math.round(newCarPrice));
         
-        // Recalculate to update all displays
+        // Manually position the marker to match the drag position
+        rangeMarker.style.left = percentage + '%';
+        
+        // Recalculate to update all displays but skip repositioning marker
         if (calculatorMode === 'payment') {
             calculateLoan();
+            // Re-apply our drag position after calculation
+            rangeMarker.style.left = percentage + '%';
         }
     }
-    
-    updateAffordabilityCheck();
 });
 
 document.addEventListener('mouseup', () => {

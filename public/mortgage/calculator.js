@@ -615,19 +615,22 @@ document.addEventListener('mousemove', (e) => {
     if (monthlyRate > 0 && principalInterestPayment > 0) {
         // Use loan payment formula to calculate principal: P = PMT * ((1 - (1 + r)^-n) / r)
         const loanAmount = principalInterestPayment * ((1 - Math.pow(1 + monthlyRate, -loanTermMonths)) / monthlyRate);
-        const newHomePrice = loanAmount + downPayment;
+        const newHomePrice = Math.max(50000, Math.min(2000000, loanAmount + downPayment));
         
         // Update the home price slider
         homePriceInput.value = Math.round(newHomePrice);
         homePriceDisplay.textContent = formatNumber(Math.round(newHomePrice));
         
-        // Recalculate to update all displays
+        // Manually position the marker to match the drag position
+        rangeMarker.style.left = percentage + '%';
+        
+        // Recalculate to update all displays but skip repositioning marker
         if (calculatorMode === 'payment') {
             calculateLoan();
+            // Re-apply our drag position after calculation
+            rangeMarker.style.left = percentage + '%';
         }
     }
-    
-    updateAffordabilityCheck();
 });
 
 document.addEventListener('mouseup', () => {

@@ -478,13 +478,22 @@ input[type="range"]::-moz-range-thumb:hover {
     height: 30px;
     display: flex;
     border-radius: 15px;
-    overflow: hidden;
+    overflow: visible;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .range-section {
     flex: 1;
     transition: opacity 0.3s;
+}
+
+.range-section:first-child {
+    border-radius: 15px 0 0 15px;
+}
+
+.range-section:last-child {
+    border-radius: 0 15px 15px 0;
 }
 
 .range-section.safe {
