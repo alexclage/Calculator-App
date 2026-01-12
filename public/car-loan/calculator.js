@@ -401,12 +401,17 @@ document.addEventListener('mousemove', (e) => {
         carPriceInput.value = Math.round(newCarPrice);
         carPriceDisplay.textContent = formatNumber(Math.round(newCarPrice));
         
+        // Save the target payment before recalculating
+        const targetPayment = newCarPayment;
+        
         // Manually position the marker to match the drag position
         rangeMarker.style.left = percentage + '%';
         
         // Recalculate to update all displays but skip repositioning marker
         if (calculatorMode === 'payment') {
             calculateLoan();
+            // Restore our target payment after calculation (calculateLoan overwrites it)
+            currentMonthlyPayment = targetPayment;
             // Re-apply our drag position after calculation
             rangeMarker.style.left = percentage + '%';
         }
