@@ -484,8 +484,19 @@ input[type="range"]::-moz-range-thumb:hover {
 }
 
 .range-section {
-    flex: 1;
     transition: opacity 0.3s;
+}
+
+.range-section.safe {
+    flex: 25;  /* 0-25% of income = 62.5% of bar (25 out of 40) */
+}
+
+.range-section.acceptable {
+    flex: 3;   /* 25-28% of income = 7.5% of bar (3 out of 40) */
+}
+
+.range-section.risky {
+    flex: 12;  /* 28-40% of income = 30% of bar (12 out of 40) */
 }
 
 .range-section:first-child {
